@@ -1,0 +1,13 @@
+app:
+  security:
+    jwtSecret: JWTSuperSecretKey
+    jwtExpirationInMs: 604800000
+
+spring:
+  data:
+    mongodb:
+      database: "urlshortener"
+
+server:
+  servlet:
+    context-path: /api

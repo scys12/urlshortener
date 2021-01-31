@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
@@ -16,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Document
+@Document("users")
 public class UserData {
     @Id
     private String userId;
@@ -26,6 +27,7 @@ public class UserData {
 
     @NotBlank
     @Size(max = 20)
+    @Indexed(unique = true)
     private String username;
 
     private Date createdDate;
@@ -36,6 +38,7 @@ public class UserData {
 
     @Email @Size(max = 50)
     @NotBlank
+    @Indexed(unique = true)
     private String email;
 
     public static UserData newInstance(User user){

@@ -1,4 +1,4 @@
-package com.samuel.urlshortener.presenter.delivery.user;
+package com.samuel.urlshortener.presenter.delivery.user.port.output;
 
 import com.samuel.urlshortener.core.domain.User;
 import com.samuel.urlshortener.presenter.delivery.entities.ApiResponse;

@@ -1,4 +1,4 @@
-package com.samuel.urlshortener.presenter.delivery.user;
+package com.samuel.urlshortener.presenter.delivery.user.port.input;
 
 import com.samuel.urlshortener.core.usecase.user.RegisterUserUseCase;
 import com.samuel.urlshortener.presenter.delivery.entities.RegisterUserRequest;
