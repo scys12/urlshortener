@@ -2,12 +2,21 @@ app:
   security:
     jwtSecret: JWTSuperSecretKey
     jwtExpirationInMs: 604800000
-
 spring:
   data:
     mongodb:
       database: "urlshortener"
-
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_CLIENT_ID}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            redirectUriTemplate: "{baseUrl}/oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
 server:
   servlet:
-    context-path: /api
+    context-path: /auth

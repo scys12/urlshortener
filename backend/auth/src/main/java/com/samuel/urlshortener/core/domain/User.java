@@ -1,6 +1,7 @@
 package com.samuel.urlshortener.core.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ public class User {
     private String name;
     private String username;
     private Date createdDate;
+    @JsonIgnore
     private String password;
     private String email;
 

@@ -14,6 +14,5 @@ public class LoginUserRequest {
     private final String email;
 
     @NotBlank
-    @Size(min = 6, max = 50)
     private final String password;
 }

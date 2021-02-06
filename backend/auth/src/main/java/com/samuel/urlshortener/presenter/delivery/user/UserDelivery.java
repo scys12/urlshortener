@@ -15,7 +15,6 @@ import javax.validation.Valid;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
-@RequestMapping("/user")
 public interface UserDelivery {
     @PostMapping("/register")
     CompletableFuture<ResponseEntity<ApiResponse>> registerUser(

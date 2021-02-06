@@ -44,7 +44,6 @@ public class UserDeliveryImpl implements UserDelivery {
 
     @Override
     public CompletableFuture<ResponseEntity<AuthenticationResponse>> loginUser(@Valid LoginUserRequest request) {
-        System.out.println(request.toString());
         return useCaseExecutor.execute(
                 loginUserUseCase,
                 LoginUserUseCaseInputMapper.map(request),

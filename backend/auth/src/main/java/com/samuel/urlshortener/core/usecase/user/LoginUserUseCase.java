@@ -1,6 +1,8 @@
 package com.samuel.urlshortener.core.usecase.user;
 
 import com.samuel.urlshortener.core.domain.User;
+import com.samuel.urlshortener.core.exception.DomainException;
+import com.samuel.urlshortener.core.exception.NotFoundException;
 import com.samuel.urlshortener.core.usecase.UseCase;
 import com.samuel.urlshortener.data.persistent.mongodb.repositories.contracts.UserRepository;
 import com.samuel.urlshortener.presenter.usecase.security.CustomUserDetailsService;
@@ -11,7 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
+
+import java.io.PrintStream;
+import java.io.PrintWriter;
 
 @Service
 public class LoginUserUseCase extends UseCase<LoginUserUseCase.InputValues, LoginUserUseCase.OutputValues>{
@@ -25,6 +31,9 @@ public class LoginUserUseCase extends UseCase<LoginUserUseCase.InputValues, Logi
     @Override
     public OutputValues execute(InputValues input) {
         Authentication authentication = authenticationManager.authenticate(input.authenticationToken);
+        if (!authentication.isAuthenticated())
+            throw new AuthenticationException("Email/Password is invalid") {
+            };
         var token = jwtProvider.generateToken(authentication);
         var userDetails = (UserPrincipal) authentication.getPrincipal();
         var user = userRepository.findByEmail(userDetails.getEmail()).get();
