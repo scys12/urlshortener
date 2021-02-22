@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: url-shortener-auth
+  name: url-shortener-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: url-shortener-auth
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: url-shortener-auth
+    spec:
+      containers:
+      - name: url-shortener-auth
+        image: scys12/url-shortener-auth:1.0.0
+        resources: {}
+        ports:
+            - containerPort: 8080
+        env:
+            - name: MONGO_URL
+              value: mongodb://mongo:27017/dev
+        imagePullPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: url-shortener-auth
+spec:
+    selector:
+        app: url-shortener-auth
+    ports:
+        - port: 80
+          targetPort: 8080
+    type: LoadBalancer
