@@ -1,15 +1,22 @@
 package com.samuel.urlshortener.core.usecase.user;
 
 import com.samuel.urlshortener.core.domain.User;
+import com.samuel.urlshortener.core.event.OnRegistrationCompleteEvent;
 import com.samuel.urlshortener.core.exception.EmailExistException;
 import com.samuel.urlshortener.core.usecase.UseCase;
 import com.samuel.urlshortener.data.persistent.mongodb.repositories.contracts.UserRepository;
 import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+
+import java.util.Locale;
 
 @Service
 public class RegisterUserUseCase extends UseCase<RegisterUserUseCase.InputValues, RegisterUserUseCase.OutputValues> {
+
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
 
     @Autowired
     private UserRepository userRepository;
@@ -19,8 +26,11 @@ public class RegisterUserUseCase extends UseCase<RegisterUserUseCase.InputValues
         if (userRepository.existsByEmail(input.getEmail())) {
             throw new EmailExistException("Email already in use!");
         }
-        User user = User.newInstance(input.getName(), input.getUsername(), input.getPassword(), input.getEmail());
-        return new OutputValues(userRepository.registerUser(user));
+        User user = User.newInstance(input.getName(), input.getUsername(), input.getPassword(), input.getEmail(), false);
+        User registeredUser = userRepository.registerUser(user);
+        final String type = "register";
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(userRepository.findByEmail(input.getEmail()).get(),input.contextPath, type));
+        return new OutputValues(registeredUser);
     }
 
     @Value
@@ -29,6 +39,7 @@ public class RegisterUserUseCase extends UseCase<RegisterUserUseCase.InputValues
         private final String email;
         private final String username;
         private final String password;
+        private final String contextPath;
     }
 
     @Value

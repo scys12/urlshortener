@@ -23,6 +23,8 @@ public class UserPrincipal implements UserDetails {
 
     private String username;
 
+    private boolean enabled;
+
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserPrincipal newPrincipal(UserData user) {
@@ -32,6 +34,7 @@ public class UserPrincipal implements UserDetails {
                 user.getEmail(),
                 user.getPassword(),
                 user.getUsername(),
+                user.isEnabled(),
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
     }
 
@@ -56,6 +59,6 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 }

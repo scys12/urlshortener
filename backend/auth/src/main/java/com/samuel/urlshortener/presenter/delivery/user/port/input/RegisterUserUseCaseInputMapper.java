@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Service
 public final class RegisterUserUseCaseInputMapper {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public RegisterUserUseCase.InputValues map(RegisterUserRequest request){
-        return new RegisterUserUseCase.InputValues(request.getName(), request.getEmail(), request.getUsername(), passwordEncoder.encode(request.getPassword()));
+    public RegisterUserUseCase.InputValues map(RegisterUserRequest request, HttpServletRequest httpServletRequest){
+        return new RegisterUserUseCase.InputValues(request.getName(), request.getEmail(), request.getUsername(), passwordEncoder.encode(request.getPassword()), httpServletRequest.getContextPath());
     }
 }

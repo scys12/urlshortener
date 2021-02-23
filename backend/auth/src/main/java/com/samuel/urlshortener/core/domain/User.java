@@ -21,8 +21,9 @@ public class User {
     @JsonIgnore
     private String password;
     private String email;
+    private boolean enabled;
 
-    public static User newInstance(String name, String username,  String password, String email) {
-        return new User(null, name, username, new Date(), password, email);
+    public static User newInstance(String name, String username,  String password, String email, boolean enabled) {
+        return new User(null, name, username, new Date(), password, email, enabled);
     }
 }

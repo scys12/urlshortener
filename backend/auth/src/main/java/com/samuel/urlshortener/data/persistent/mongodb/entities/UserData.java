@@ -41,13 +41,15 @@ public class UserData {
     @Indexed(unique = true)
     private String email;
 
+    private boolean enabled;
+
     public static UserData newInstance(User user){
-        return new UserData(null, user.getName(), user.getUsername(), new Date(), user.getPassword(), user.getEmail());
+        return new UserData(null, user.getName(), user.getUsername(), new Date(), user.getPassword(), user.getEmail(), false);
     }
 
     public User toUser() {
         return new User(
-                userId, name, username, createdDate, null, email
+                userId, name, username, createdDate, null, email, enabled
         );
     }
 }

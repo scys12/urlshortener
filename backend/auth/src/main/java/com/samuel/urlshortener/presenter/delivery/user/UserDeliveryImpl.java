@@ -37,7 +37,7 @@ public class UserDeliveryImpl implements UserDelivery {
     public CompletableFuture<ResponseEntity<ApiResponse>> registerUser(@Valid RegisterUserRequest request, HttpServletRequest httpServletRequest) {
         return useCaseExecutor.execute(
                 registerUserUseCase,
-                registerUserUseCaseInputMapper.map(request),
+                registerUserUseCaseInputMapper.map(request, httpServletRequest),
                 (outputValues -> RegisterUserUseCaseOutputMapper.map(outputValues.getUser(), httpServletRequest))
         );
     }

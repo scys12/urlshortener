@@ -2,6 +2,10 @@ app:
   security:
     jwtSecret: JWTSuperSecretKey
     jwtExpirationInMs: 604800000
+  rabbitmq:
+    exchange: urlshortener-auth.exchange
+    queue: urlshortener-auth.queue
+    routingkey: urlshortener-auth.routingkey
 spring:
   data:
     mongodb:
@@ -17,6 +21,11 @@ spring:
             scope:
               - email
               - profile
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 server:
   servlet:
     context-path: /auth
