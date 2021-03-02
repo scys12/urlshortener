@@ -6,6 +6,7 @@ app:
     exchange: urlshortener-auth.exchange
     queue: urlshortener-auth.queue
     routingkey: urlshortener-auth.routingkey
+
 spring:
   data:
     mongodb:
@@ -22,7 +23,7 @@ spring:
               - email
               - profile
   rabbitmq:
-    host: localhost
+    host: ${RABBIT_HOST:localhost}
     port: 5672
     username: guest
     password: guest

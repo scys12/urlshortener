@@ -14,6 +14,13 @@ public final class RegisterUserUseCaseInputMapper {
     private PasswordEncoder passwordEncoder;
 
     public RegisterUserUseCase.InputValues map(RegisterUserRequest request, HttpServletRequest httpServletRequest){
-        return new RegisterUserUseCase.InputValues(request.getName(), request.getEmail(), request.getUsername(), passwordEncoder.encode(request.getPassword()), httpServletRequest.getContextPath());
+        int serverPort = httpServletRequest.getServerPort();
+        StringBuilder url = new StringBuilder();
+        url.append(httpServletRequest.getScheme()).append("://").append(httpServletRequest.getServerName());
+        if (serverPort != 80 && serverPort != 443) {
+            url.append(":").append(serverPort);
+        }
+        url.append(httpServletRequest.getContextPath());
+        return new RegisterUserUseCase.InputValues(request.getName(), request.getEmail(), request.getUsername(), passwordEncoder.encode(request.getPassword()), url.toString());
     }
 }
