@@ -16,9 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import java.io.PrintStream;
-import java.io.PrintWriter;
-
 @Service
 public class LoginUserUseCase extends UseCase<LoginUserUseCase.InputValues, LoginUserUseCase.OutputValues>{
     @Autowired

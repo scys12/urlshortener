@@ -29,7 +29,7 @@ public class EmailVerificationData {
 
     private Date expiryDate;
 
-    private Date calculateExpiryDate(int expiryTimeInMinutes) {
+    private static Date calculateExpiryDate(int expiryTimeInMinutes) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Timestamp(cal.getTime().getTime()));
         cal.add(Calendar.MINUTE, expiryTimeInMinutes);
@@ -37,7 +37,7 @@ public class EmailVerificationData {
     }
 
     public static EmailVerificationData newInstance(String token, UserData user){
-        return new EmailVerificationData(null, token, user, new Date());
+        return new EmailVerificationData(null, token, user, calculateExpiryDate(EXPIRATION));
     }
 
 }

@@ -6,6 +6,8 @@ import com.samuel.urlshortener.data.persistent.mongodb.repositories.MongoEmailVe
 import com.samuel.urlshortener.data.persistent.mongodb.repositories.contracts.EmailVerificationRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class EmailVerificationRepositoryImpl implements EmailVerificationRepository {
     private final MongoEmailVerificationRepository mongoEmailVerificationRepository;
@@ -14,7 +16,7 @@ public class EmailVerificationRepositoryImpl implements EmailVerificationReposit
         this.mongoEmailVerificationRepository = mongoEmailVerificationRepository;
     }
     @Override
-    public EmailVerificationData getVerificationToken(String verificationToken) {
+    public Optional<EmailVerificationData> getVerificationToken(String verificationToken) {
         return mongoEmailVerificationRepository.findByToken(verificationToken);
     }
 

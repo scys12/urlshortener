@@ -3,14 +3,17 @@ package com.samuel.urlshortener.presenter.delivery.user;
 import com.samuel.urlshortener.core.usecase.UseCaseExecutor;
 import com.samuel.urlshortener.core.usecase.user.LoginUserUseCase;
 import com.samuel.urlshortener.core.usecase.user.RegisterUserUseCase;
+import com.samuel.urlshortener.core.usecase.user.VerifyAccountUseCase;
 import com.samuel.urlshortener.presenter.delivery.entities.ApiResponse;
 import com.samuel.urlshortener.presenter.delivery.entities.AuthenticationResponse;
 import com.samuel.urlshortener.presenter.delivery.entities.LoginUserRequest;
 import com.samuel.urlshortener.presenter.delivery.entities.RegisterUserRequest;
 import com.samuel.urlshortener.presenter.delivery.user.port.input.LoginUserUseCaseInputMapper;
 import com.samuel.urlshortener.presenter.delivery.user.port.input.RegisterUserUseCaseInputMapper;
+import com.samuel.urlshortener.presenter.delivery.user.port.input.VerifyAccountUseCaseInputMapper;
 import com.samuel.urlshortener.presenter.delivery.user.port.output.LoginUserUseCaseOutputMapper;
 import com.samuel.urlshortener.presenter.delivery.user.port.output.RegisterUserUseCaseOutputMapper;
+import com.samuel.urlshortener.presenter.delivery.user.port.output.VerifyAccountUseCaseOutputMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -28,10 +31,13 @@ public class UserDeliveryImpl implements UserDelivery {
     private RegisterUserUseCase registerUserUseCase;
 
     @Autowired
-    private RegisterUserUseCaseInputMapper registerUserUseCaseInputMapper;
+    private LoginUserUseCase loginUserUseCase;
 
     @Autowired
-    private LoginUserUseCase loginUserUseCase;
+    private VerifyAccountUseCase verifyAccountUseCase;
+
+    @Autowired
+    private RegisterUserUseCaseInputMapper registerUserUseCaseInputMapper;
 
     @Override
     public CompletableFuture<ResponseEntity<ApiResponse>> registerUser(@Valid RegisterUserRequest request, HttpServletRequest httpServletRequest) {
@@ -48,6 +54,15 @@ public class UserDeliveryImpl implements UserDelivery {
                 loginUserUseCase,
                 LoginUserUseCaseInputMapper.map(request),
                 LoginUserUseCaseOutputMapper::map
+        );
+    }
+
+    @Override
+    public CompletableFuture<ResponseEntity<ApiResponse>> verifyAccount(@Valid String token, HttpServletRequest request) {
+        return useCaseExecutor.execute(
+            verifyAccountUseCase,
+            VerifyAccountUseCaseInputMapper.map(token),
+            (outputValues -> VerifyAccountUseCaseOutputMapper.map(request))
         );
     }
 }

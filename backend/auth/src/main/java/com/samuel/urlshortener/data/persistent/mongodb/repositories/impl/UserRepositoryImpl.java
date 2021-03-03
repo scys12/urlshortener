@@ -35,7 +35,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User registerUser(User user) {
-        final UserData userData = UserData.newInstance(user);
+        UserData userData;
+        if (user.getUserId() == null ) {
+            userData = UserData.newInstance(user);
+        }else userData = UserData.newExistingInstance(user);
         return mongoUserRepository.save(userData).toUser();
     }
 }

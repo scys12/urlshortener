@@ -4,9 +4,7 @@ import com.samuel.urlshortener.core.usecase.user.LoginUserUseCase;
 import com.samuel.urlshortener.presenter.delivery.entities.AuthenticationResponse;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public final class LoginUserUseCaseOutputMapper {

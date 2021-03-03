@@ -47,9 +47,19 @@ public class UserData {
         return new UserData(null, user.getName(), user.getUsername(), new Date(), user.getPassword(), user.getEmail(), false);
     }
 
+    public static UserData newExistingInstance(User user){
+        return new UserData(user.getUserId(), user.getName(), user.getUsername(), user.getCreatedDate(), user.getPassword(), user.getEmail(), user.isEnabled());
+    }
+
     public User toUser() {
         return new User(
                 userId, name, username, createdDate, null, email, enabled
+        );
+    }
+
+    public User toExistingUser(){
+        return new User(
+                userId, name, username, createdDate, password, email, enabled
         );
     }
 }
