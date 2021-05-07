@@ -8,6 +8,7 @@ const connectToMongoDb = async () => {
       useCreateIndex: true,
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(`Error: ${error.message}`);
     process.exit(1);
   }

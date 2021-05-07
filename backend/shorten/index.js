@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import connectToMongoDb from './config/db.js';
 import routes from './routes/routes.js';
+import { errorHandler } from './middleware/index.js';
 
 dotenv.config();
 const app = express();
@@ -12,6 +13,7 @@ app.use(morgan('dev'));
 app.use(routes);
 
 app.all('*', async (req, res) => res.status(404).json({ message: 'Request not found' }));
+app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {});
