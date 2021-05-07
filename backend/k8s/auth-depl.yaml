@@ -19,16 +19,16 @@ spec:
     spec:
       containers:
       - name: url-shortener-auth
-        image: scys12/url-shortener-auth:1.0.0
+        image: url-shortener-auth:1.0.0
         resources: {}
         ports:
             - containerPort: 8080
         env:
             - name: MONGO_URL
-              value: mongodb://mongo:27017/dev
+              value: mongodb://mongo-auth:27017/dev
             - name: RABBIT_HOST
               value: url-shortener-rabbitmq
-        imagePullPolicy: Always
+        imagePullPolicy: Never
 status: {}
 ---
 apiVersion: v1

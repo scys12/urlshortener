@@ -19,14 +19,14 @@ spec:
     spec:
       containers:
       - name: url-shortener-mail
-        image: scys12/url-shortener-mail:1.0.0
+        image: url-shortener-mail:1.0.0
         resources: {}
         ports:
             - containerPort: 8081
         env:
             - name: RABBIT_HOST
               value: url-shortener-rabbitmq
-        imagePullPolicy: Always
+        imagePullPolicy: Never
 status: {}
 ---
 apiVersion: v1

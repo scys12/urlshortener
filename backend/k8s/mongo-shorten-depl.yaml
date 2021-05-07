@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-shorten-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-shorten
+spec:
+  selector:
+    app: mongo-shorten
+  ports:
+    - port: 27017
+      targetPort: 27017
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-shorten
+spec:
+  selector:
+    matchLabels:
+      app: mongo-shorten
+  template:
+    metadata:
+      labels:
+        app: mongo-shorten
+    spec:
+      containers:
+        - name: mongo-shorten
+          image: mongo
+          resources: {}
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-shorten-pvc

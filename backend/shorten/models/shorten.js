@@ -7,11 +7,11 @@ const shortenSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
-    expiration_length_in_minutes: {
-      type: Number,
+    expirationDate: {
+      type: Date,
       required: true,
     },
-    paste_content: {
+    pasteContent: {
       type: String,
       required: true,
     },

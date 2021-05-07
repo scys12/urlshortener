@@ -4,12 +4,16 @@ metadata:
   name: backend
 build:
   artifacts:
-  - image: scys12/url-shortener-auth
+  - image: url-shortener-auth
     context: auth
     docker:
       dockerfile: Dockerfile
-  - image: scys12/url-shortener-mail
+  - image: url-shortener-mail
     context: mail
+    docker:
+      dockerfile: Dockerfile
+  - image: url-shortener-shorten
+    context: shorten
     docker:
       dockerfile: Dockerfile
 deploy:
@@ -17,4 +21,6 @@ deploy:
     manifests:
     - k8s/auth-depl.yaml
     - k8s/mail-depl.yaml
-    - k8s/mongo-depl.yaml
+    - k8s/mongo-auth-depl.yaml
+    - k8s/mongo-shorten-depl.yaml
+    - k8s/shorten-depl.yaml
