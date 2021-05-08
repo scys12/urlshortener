@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingress-kong
+  namespace: kong
+spec:
+  template:
+    spec:
+      containers:
+      - name: proxy
+        env:
+        - name: KONG_PLUGINS
+          value: bundled,jwt-claims-headers
+        - name: KONG_LUA_PACKAGE_PATH
+          value: "/opt/?.lua;;"
+        volumeMounts:
+        - name: kong-plugin-jwt-claims-headers
+          mountPath: /opt/kong/plugins/jwt-claims-headers
+      volumes:
+      - name: kong-plugin-jwt-claims-headers
+        configMap:
+          name: kong-plugin-jwt-claims-headers

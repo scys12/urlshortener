@@ -1,0 +1,77 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: app-jwt
+plugin: jwt
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: jwt-claims-headers
+disabled: false
+plugin: jwt-claims-headers
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo-get
+  annotations:
+    konghq.com/plugins: app-jwt,jwt-claims-headers
+    konghq.com/strip-path: "false"
+    kubernetes.io/ingress.class: kong
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /get
+        backend:
+          serviceName: httpbin
+          servicePort: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: demo-post
+  annotations:
+    konghq.com/plugins: app-jwt
+    konghq.com/strip-path: "false"
+    kubernetes.io/ingress.class: kong
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /post
+        backend:
+          serviceName: httpbin
+          servicePort: 80
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: admin
+  annotations:
+    kubernetes.io/ingress.class: kong
+username: admin
+credentials:
+  - app-admin-jwt
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongConsumer
+metadata:
+  name: plain-user
+  annotations:
+    kubernetes.io/ingress.class: kong
+username: plain-user
+credentials:
+  - app-user-jwt
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-user-jwt
+type: Opaque
+stringData:
+  algorithm: HS256
+  key: "user-issuer"
+  kongCredType: jwt
+  secret: JWTSuperSecretKey
