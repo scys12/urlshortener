@@ -3,6 +3,8 @@ kind: Config
 metadata:
   name: backend
 build:
+  tagPolicy:
+    sha256: {}
   artifacts:
   - image: url-shortener-auth
     context: auth

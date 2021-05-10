@@ -7,7 +7,7 @@ import (
 
 func main() {
 	config := config.InitConfig()
-	rmq, err := rabbitmq.NewRabbitMQ(config, true)
+	rmq, err := rabbitmq.NewRabbitMQ(config, false)
 	if err != nil {
 		panic(err)
 	}

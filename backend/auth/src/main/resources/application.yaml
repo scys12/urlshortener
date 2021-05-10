@@ -1,6 +1,6 @@
 app:
   security:
-    jwtSecret: JWTSuperSecretKey
+    jwtSecret: 2z1b0KoejjY4TFuZ5LWYToWjyoIkB_47KfetZl6DH5Q
     jwtExpirationInMs: 604800000
   rabbitmq:
     exchange: urlshortener-auth.exchange
@@ -27,6 +27,3 @@ spring:
     port: 5672
     username: guest
     password: guest
-server:
-  servlet:
-    context-path: /auth

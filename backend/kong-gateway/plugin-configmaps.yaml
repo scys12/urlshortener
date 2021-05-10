@@ -1,0 +1,38 @@
+apiVersion: v1
+data:
+  handler.lua: "local BasePlugin = require \"kong.plugins.base_plugin\"\nlocal jwt_decoder
+    = require \"kong.plugins.jwt.jwt_parser\"\nlocal req_set_header = ngx.req.set_header\nlocal
+    ngx_re_gmatch = ngx.re.gmatch\n\nlocal JwtClaimsHeadersHandler = BasePlugin:extend()\n\nlocal
+    function retrieve_token(request, conf)\n  local uri_parameters = request.get_uri_args()\n\n
+    \ for _, v in ipairs(conf.uri_param_names) do\n    if uri_parameters[v] then\n
+    \     return uri_parameters[v]\n    end\n  end\n\n  local authorization_header
+    = request.get_headers()[\"authorization\"]\n  if authorization_header then\n    local
+    iterator, iter_err = ngx_re_gmatch(authorization_header, \"\\\\s*[Bb]earer\\\\s+(.+)\")\n
+    \   if not iterator then\n      return nil, iter_err\n    end\n\n    local m,
+    err = iterator()\n    if err then\n      return nil, err\n    end\n\n    if m
+    and #m > 0 then\n      return m[1]\n    end\n  end\nend\n\nfunction JwtClaimsHeadersHandler:new()\n
+    \ JwtClaimsHeadersHandler.super.new(self, \"jwt-claims-headers\")\nend\n\nfunction
+    JwtClaimsHeadersHandler:access(conf)\n  JwtClaimsHeadersHandler.super.access(self)\n
+    \ local continue_on_error = conf.continue_on_error\n\n  local token, err = retrieve_token(ngx.req,
+    conf)\n  if err and not continue_on_error then\n    return kong.response.exit(500,
+    { message = err })\n  end\n\n  if not token and not continue_on_error then\n    return
+    kong.response.exit(401)\n  elseif not token and continue_on_error then\n    return\n
+    \ end\n\n  local jwt, err = jwt_decoder:new(token)\n  if err and not continue_on_error
+    then\n    return kong.response.exit(500)\n  end\n\n  local claims = jwt.claims\n
+    \ for claim_key,claim_value in pairs(claims) do\n    for _,claim_pattern in pairs(conf.claims_to_include)
+    do      \n      if string.match(claim_key, \"^\"..claim_pattern..\"$\") then\n
+    \       req_set_header(\"X-\"..claim_key, claim_value)\n      end\n    end\n  end\nend\n\nreturn
+    JwtClaimsHeadersHandler\n"
+  schema.lua: |
+    return {
+      no_consumer = true,
+      fields = {
+        uri_param_names = {type = "array", default = {"jwt"}},
+        claims_to_include = {type = "array", default = {".*"}},
+        continue_on_error = {type = "boolean", default = true}
+      }
+    }
+kind: ConfigMap
+metadata:
+  name: kong-plugin-jwt-claims-headers
+  namespace: kong

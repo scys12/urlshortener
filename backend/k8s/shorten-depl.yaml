@@ -1,25 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  labels:
-    app: url-shortener-shorten
   name: url-shortener-shorten
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: url-shortener-shorten
-  strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: url-shortener-shorten
     spec:
       containers:
       - name: url-shortener-shorten
-        image: url-shortener-shorten:1.0
+        image: url-shortener-shorten:latest
         resources: {}
         ports:
             - containerPort: 5000
@@ -27,9 +22,8 @@ spec:
             - name: PORT
               value: "5000"
             - name: MONGO_URI
-              value: mongodb://mongo-shorten:27017/dev
-        imagePullPolicy: Always
-status: {}
+              value: mongodb://mongo-shorten:27018/dev
+        imagePullPolicy: Never
 ---
 apiVersion: v1
 kind: Service
@@ -41,4 +35,4 @@ spec:
     ports:
         - port: 5000
           targetPort: 5000
-    type: LoadBalancer
+    type: ClusterIP

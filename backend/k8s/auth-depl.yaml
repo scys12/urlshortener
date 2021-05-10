@@ -1,25 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  labels:
-    app: url-shortener-auth
   name: url-shortener-auth
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: url-shortener-auth
-  strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: url-shortener-auth
     spec:
       containers:
       - name: url-shortener-auth
-        image: url-shortener-auth:1.0.0
+        image: url-shortener-auth:latest
         resources: {}
         ports:
             - containerPort: 8080
@@ -29,7 +24,6 @@ spec:
             - name: RABBIT_HOST
               value: url-shortener-rabbitmq
         imagePullPolicy: Never
-status: {}
 ---
 apiVersion: v1
 kind: Service
@@ -41,4 +35,4 @@ spec:
     ports:
         - port: 8080
           targetPort: 8080
-    type: LoadBalancer
+    type: ClusterIP

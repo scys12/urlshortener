@@ -2,6 +2,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongPlugin
 metadata:
   name: app-jwt
+config:
+  secret_is_base64: false
 plugin: jwt
 ---
 apiVersion: configuration.konghq.com/v1
@@ -11,39 +13,59 @@ metadata:
 disabled: false
 plugin: jwt-claims-headers
 ---
-apiVersion: extensions/v1beta1
-kind: Ingress
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
 metadata:
-  name: demo-get
-  annotations:
-    konghq.com/plugins: app-jwt,jwt-claims-headers
-    konghq.com/strip-path: "false"
-    kubernetes.io/ingress.class: kong
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /get
-        backend:
-          serviceName: httpbin
-          servicePort: 80
+  name: rewrite-two-request
+config: 
+  replace:
+    uri: '/$(uri_captures[1])/$(uri_captures[2])'
+plugin: request-transformer
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: rewrite-one-request
+config: 
+  replace:
+    uri: '/$(uri_captures[2])'
+plugin: request-transformer
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: demo-post
+  name: gateway-auth
+  annotations:    
+    kubernetes.io/ingress.class: kong
+    konghq.com/plugins: rewrite-two-request
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /api/(.*)/(.*)
+        backend:
+          serviceName: url-shortener-auth
+          servicePort: 8080
+      - path: /api/(.*)/(.*)
+        backend:
+          serviceName: url-shortener-auth
+          servicePort: 8080
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gateway-shorten
   annotations:
-    konghq.com/plugins: app-jwt
-    konghq.com/strip-path: "false"
+    konghq.com/plugins: rewrite-one-request,app-jwt,jwt-claims-headers
     kubernetes.io/ingress.class: kong
 spec:
   rules:
   - http:
       paths:
-      - path: /post
+      - path: /api/shorten/(.*)
         backend:
-          serviceName: httpbin
-          servicePort: 80
+          serviceName: url-shortener-shorten
+          servicePort: 5000
 ---
 apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
@@ -74,4 +96,4 @@ stringData:
   algorithm: HS256
   key: "user-issuer"
   kongCredType: jwt
-  secret: JWTSuperSecretKey
+  secret: 2z1b0KoejjY4TFuZ5LWYToWjyoIkB_47KfetZl6DH5Q

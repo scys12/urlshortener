@@ -13,11 +13,11 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 public interface UserDelivery {
-    @PostMapping("/register")
+    @PostMapping("/auth/register")
     CompletableFuture<ResponseEntity<ApiResponse>> registerUser(
             @Valid @RequestBody RegisterUserRequest request, HttpServletRequest httpServletRequest);
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     CompletableFuture<ResponseEntity<AuthenticationResponse>> loginUser(
             @Valid @RequestBody LoginUserRequest request);
 
