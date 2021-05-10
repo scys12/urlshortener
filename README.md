@@ -36,5 +36,5 @@ minikube service -n kong kong-proxy --url
 Copy the url and access the gateway from that url, e.g:
 
 ```bash
-curl -i http:127.0.0.1:PORT
+curl -i http://127.0.0.1:PORT
 ```
