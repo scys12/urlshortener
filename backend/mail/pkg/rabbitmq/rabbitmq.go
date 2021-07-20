@@ -84,7 +84,7 @@ func (rmq *RabbitMQ) createQos() (err error) {
 func (rmq *RabbitMQ) declareQueue() (err error) {
 	logrus.Debugf("Declare Queue: %s", rmq.QueueName)
 	_, err = rmq.Channel.QueueDeclare(
-		rmq.ExchangeName,
+		rmq.QueueName,
 		true,
 		false,
 		false,

@@ -40,12 +40,9 @@ metadata:
     konghq.com/plugins: rewrite-two-request
 spec:
   rules:
-  - http:
+  - host: pendek.in
+    http:
       paths:
-      - path: /api/(.*)/(.*)
-        backend:
-          serviceName: url-shortener-auth
-          servicePort: 8080
       - path: /api/(.*)/(.*)
         backend:
           serviceName: url-shortener-auth
@@ -60,7 +57,8 @@ metadata:
     kubernetes.io/ingress.class: kong
 spec:
   rules:
-  - http:
+  - host: pendek.in
+    http:
       paths:
       - path: /api/shorten/(.*)
         backend:
